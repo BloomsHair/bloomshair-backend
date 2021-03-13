@@ -50,7 +50,6 @@ const registerUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
-      token: req.token,
     });
   } catch (err) {
     res.status(404);
