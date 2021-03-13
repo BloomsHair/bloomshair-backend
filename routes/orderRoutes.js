@@ -7,9 +7,9 @@ import {
   getUserOrders,
   getOrders,
   updateOrderToDelivered,
-} from '../controllers/orderController';
-import { isAuthenticated } from "../auth/authenticated";
-import { isAuthorized } from "../auth/authorize";
+} from '../controllers/orderController.js';
+import { isAuthenticated } from "../auth/authenticated.js";
+import { isAuthorized } from "../auth/authorize.js";
 
 router.route('/').post(isAuthenticated, addOrderItems).get(isAuthenticated,
   isAuthorized({ hasRole: ['admin', 'manager'] }), getOrders);

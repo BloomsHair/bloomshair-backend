@@ -8,9 +8,9 @@ import {
   updateProduct,
   createProductReview,
   topRatedProducts,
-} from '../controllers/productController';
-import { isAuthenticated } from "../auth/authenticated";
-import { isAuthorized } from "../auth/authorize";
+} from '../controllers/productController.js';
+import { isAuthenticated } from "../auth/authenticated.js";
+import { isAuthorized } from "../auth/authorize.js";
 
 router.route('/').get(getProducts).post(isAuthenticated,
   isAuthorized({ hasRole: ['admin', 'manager'] }), createProduct);

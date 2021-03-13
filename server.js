@@ -1,20 +1,22 @@
 import path from 'path';
 import express from 'express';
-import * as admin from 'firebase-admin'
+import admin from 'firebase-admin'
 import dotenv from 'dotenv';
 import morgan from 'morgan';
 import cors from 'cors';
-import { errorHandler, notFound } from './middleware/errorMiddleware';
+import { errorHandler, notFound } from './middleware/errorMiddleware.js';
+import connectDB from './config/db.js';
 
 
-import productRoutes from './routes/productRoutes';
-import userRoutes from './routes/userRoutes';
-import orderRoutes from './routes/orderRoutes';
-import uploadRoutes from './routes/uploadRoutes';
+import productRoutes from './routes/productRoutes.js';
+import userRoutes from './routes/userRoutes.js';
+import orderRoutes from './routes/orderRoutes.js';
+import serviceAccount from './bloomshair-e4d4d-firebase-adminsdk-byumh-1eef9175ef.json';
 
 dotenv.config();
 
-const serviceAccount = require('./bloomshair-e4d4d-firebase-adminsdk-byumh-1eef9175ef.json');
+connectDB();
+
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -29,7 +31,6 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use(express.json());
 app.use(express.urlencoded());
-app.use(cors({ origin: true }));
 
 app.get('/api', (_, res) => {
   res.send('API is running ...');
@@ -38,7 +39,6 @@ app.get('/api', (_, res) => {
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
-app.use('/api/upload', uploadRoutes);
 
 app.get('/api/config/paypal', (_, res) =>
   res.send(process.env.PAYPAL_CLIENT_ID)

@@ -1,7 +1,6 @@
-import { Request, Response } from "express";
 import * as admin from 'firebase-admin'
 
-export async function isAuthenticated(req: Request, res: Response, next: Function) {
+export async function getUid(req, res) {
     const { authorization } = req.headers
 
     if (!authorization)
@@ -17,10 +16,9 @@ export async function isAuthenticated(req: Request, res: Response, next: Functio
     const token = split[1]
 
     try {
-        const decodedToken: admin.auth.DecodedIdToken = await admin.auth().verifyIdToken(token);
-        res.locals = { ...res.locals, uid: decodedToken.uid, role: decodedToken.role, email: decodedToken.email }
-        req.body.uid = decodedToken.uid;
-        return next();
+        const decodedToken = await admin.auth().verifyIdToken(token);
+        const uid = decodedToken.uid;
+        return uid;
     }
     catch (err) {
         console.error(`${err.code} -  ${err.message}`)
