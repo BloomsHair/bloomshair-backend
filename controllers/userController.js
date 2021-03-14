@@ -25,7 +25,7 @@ const authUser = asyncHandler(async (req, res) => {
 const registerUser = asyncHandler(async (req, res) => {
   try {
     const { displayName, password, email, role, disabled } = req.body;
-
+    
     if (!displayName || !password || !email || !role) {
       return res.status(400).send({ message: 'Missing fields' });
     }
@@ -36,14 +36,15 @@ const registerUser = asyncHandler(async (req, res) => {
       email,
       disabled,
     });
-    await admin.auth().setCustomUserClaims(uid, { role });
+    await admin
+      .auth()
+      .setCustomUserClaims(uid, { role: role === 'admin' ? role : 'user' });
     const user = await User.create({
       name: displayName,
       uid,
       email,
       isAdmin: role === 'admin' ? true : false,
     });
-
     return res.status(201).json({
       _id: user._id,
       uid: user.uid,
@@ -166,7 +167,7 @@ const updateUser = asyncHandler(async (req, res) => {
       await admin.auth().updateUser(user.uid, { displayName, password, email });
       await admin.auth().setCustomUserClaims(user.uid, { role });
 
-      return res.status(204).send({
+      return res.status(204).json({
         _id: updatedUser._id,
         uid: updatedUser.uid,
         name: updatedUser.name,

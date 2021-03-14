@@ -99,9 +99,8 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
 // @route GET /api/order/myorders
 // @access Private
 const getUserOrders = asyncHandler(async (req, res) => {
-  const order = await Order.find({ user: req.user[0]._id });
-
-  res.json(order);
+  const orders = await Order.find({ user: req.user[0]._id });
+  res.json(orders);
 });
 // @desc Get all orders
 // @route GET /api/orders
