@@ -1,4 +1,4 @@
-{
+export default {
   "type": "service_account",
   "project_id": "bloomshair-e4d4d",
   "private_key_id": "1eef9175ef2efa2b95a1bb86d90405d36a9d414f",

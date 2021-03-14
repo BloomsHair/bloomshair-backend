@@ -11,7 +11,7 @@ import connectDB from './config/db.js';
 import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
-import serviceAccount from './bloomshair-e4d4d-firebase-adminsdk-byumh-1eef9175ef.json';
+import serviceAccount  from './bloomshair-e4d4d-firebase-adminsdk-byumh-1eef9175ef.js';
 
 dotenv.config();
 
