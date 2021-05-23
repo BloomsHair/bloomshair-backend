@@ -1,20 +1,23 @@
 import asyncHandler from 'express-async-handler';
-import admin from 'firebase-admin';
+import generateToken from '../utils/generateToken.js';
 import User from '../models/userModel.js';
 
 const authUser = asyncHandler(async (req, res) => {
-  const { email } = req.body;
+  const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
 
-    if (user.email === req.user[0].email) {
+    if (user && (await user.matchPassword(password))) {
       res.json({
         _id: user._id,
         name: user.name,
         email: user.email,
         isAdmin: user.isAdmin,
-        token: req.token
+        token: generateToken(user._id),
       });
+    } else {
+      res.status(401);
+      throw new Error('Invalid email or password');
     }
   } catch (error) {
     res.status(401);
@@ -23,38 +26,35 @@ const authUser = asyncHandler(async (req, res) => {
 });
 
 const registerUser = asyncHandler(async (req, res) => {
-  try {
-    const { displayName, password, email, role, disabled } = req.body;
-    
-    if (!displayName || !password || !email || !role) {
-      return res.status(400).send({ message: 'Missing fields' });
-    }
+  const { displayName, password, email } = req.body;
 
-    const { uid } = await admin.auth().createUser({
-      displayName,
-      password,
-      email,
-      disabled,
-    });
-    await admin
-      .auth()
-      .setCustomUserClaims(uid, { role: role === 'admin' ? role : 'user' });
-    const user = await User.create({
-      name: displayName,
-      uid,
-      email,
-      isAdmin: role === 'admin' ? true : false,
-    });
-    return res.status(201).json({
+  if (!displayName || !password || !email) {
+    return res.status(400).send({ message: 'Missing fields' });
+  }
+
+  const userExist = await User.findOne({ email });
+
+  if (userExist) {
+    res.status(400);
+    throw new Error('User already exists');
+  }
+
+  const user = await User.create({
+    name: displayName,
+    email,
+    password,
+  });
+  if (user) {
+    res.status(201).json({
       _id: user._id,
-      uid: user.uid,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      token: generateToken(user._id),
     });
-  } catch (err) {
-    res.status(404);
-    throw new Error('User not Registered');
+  } else {
+    res.status(400);
+    throw new Error('Invalid user data');
   }
 });
 
@@ -62,7 +62,7 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route GET /api/users/profile
 // @access Private
 const getUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user[0]._id);
+  const user = await User.findById(req.user._id);
 
   if (user) {
     res.json({
@@ -97,6 +97,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       name: updatedUser.name,
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
+      token: generateToken(updatedUser._id),
     });
   } else {
     res.status(404);
@@ -121,10 +122,9 @@ const deleteUser = asyncHandler(async (req, res) => {
     const user = await User.findById(id);
 
     if (user) {
-      await admin.auth().deleteUser(id);
       await user.remove();
+      res.json({ message: 'User removed' });
     }
-    res.json({ message: 'User removed' });
   } catch (error) {
     res.status(404);
     throw new Error('User not found');
@@ -148,34 +148,26 @@ const getUserById = asyncHandler(async (req, res) => {
 // @route PUT /api/users/:id
 // @access Private/Admin
 const updateUser = asyncHandler(async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { displayName, password, email, role } = req.body;
-    const user = await User.findById(id);
 
-    if (!id || !displayName || !password || !email || !role) {
-      return res.status(400).send({ message: 'Missing fields' });
-    }
+    const { id } = req.params;
+  console.log(id)
+  const { displayName, email } = req.body;
+    const user = await User.findById(id);
 
     if (user) {
       user.name = displayName || user.name;
       user.email = email || user.email;
-      user.isAdmin = role === 'admin' ? true : false;
+      user.isAdmin = req.body.isAdmin;
 
       const updatedUser = await user.save();
 
-      await admin.auth().updateUser(user.uid, { displayName, password, email });
-      await admin.auth().setCustomUserClaims(user.uid, { role });
-
       return res.status(204).json({
         _id: updatedUser._id,
-        uid: updatedUser.uid,
         name: updatedUser.name,
         email: updatedUser.email,
         isAdmin: updatedUser.isAdmin,
       });
-    }
-  } catch (err) {
+    } else {
     res.status(404);
     throw new Error('User not found');
   }

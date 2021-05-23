@@ -10,19 +10,18 @@ import {
   getUserById,
   updateUser,
 } from '../controllers/userController.js';
-import { isAuthenticated } from "../auth/authenticated.js";
-import { isAuthorized } from "../auth/authorize.js";
+import { protect, isAdmin } from '../middleware/authMiddleware.js';
 
-router.post('/login', isAuthenticated, authUser);
+router.post('/login', authUser);
 router
   .route('/profile')
-  .get(isAuthenticated, getUserProfile)
-  .put(isAuthenticated, updateUserProfile);
-router.route('/').post(registerUser).get(isAuthenticated, isAuthorized({ hasRole: ['admin', 'manager'] }), getUsers);
+  .get(protect, getUserProfile)
+  .put(protect, updateUserProfile);
+router.route('/').post(registerUser).get(protect, isAdmin, getUsers);
 router
   .route('/:id')
-  .delete(isAuthenticated, isAuthorized({ hasRole: ['admin', 'manager'] }), deleteUser)
-  .get(isAuthenticated, isAuthorized({ hasRole: ['admin', 'manager'] }), getUserById)
-  .put(isAuthenticated, isAuthorized({ hasRole: ['admin', 'manager'] }), updateUser);
+  .delete(protect, isAdmin, deleteUser)
+  .get(protect, isAdmin, getUserById)
+  .put(protect, isAdmin, updateUser);
 
 export default router;

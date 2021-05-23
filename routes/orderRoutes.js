@@ -10,14 +10,16 @@ import {
 } from '../controllers/orderController.js';
 import { isAuthenticated } from "../auth/authenticated.js";
 import { isAuthorized } from "../auth/authorize.js";
+import { isAdmin, protect } from '../middleware/authMiddleware.js';
 
-router.route('/').post(isAuthenticated, addOrderItems).get(isAuthenticated,
-  isAuthorized({ hasRole: ['admin', 'manager'] }), getOrders);
-router.route('/myorders').get(isAuthenticated, getUserOrders);
+router
+  .route('/')
+  .post(isAuthenticated, addOrderItems)
+  .get(protect, isAdmin, getOrders);
+router.route('/myorders').get(protect, getUserOrders);
 
-router.route('/:id').get(isAuthenticated, getOrderById);
-router.route('/:id/pay').put(isAuthenticated, updateOrderToPaid);
-router.route('/:id/deliver').put(isAuthenticated,
-  isAuthorized({ hasRole: ['admin', 'manager'] }), updateOrderToDelivered);
+router.route('/:id').get(protect, getOrderById);
+router.route('/:id/pay').put(protect, updateOrderToPaid);
+router.route('/:id/deliver').put(protect, isAdmin, updateOrderToDelivered);
 
 export default router;

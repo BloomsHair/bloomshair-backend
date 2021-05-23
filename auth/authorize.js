@@ -2,7 +2,7 @@ export function isAuthorized({ hasRole, allowSameUser }) {
     return (req, res, next) => {
         const { role, email, uid } = res.locals
         const { id } = req.params
-
+        console.log(role)
 
         if (email === 'bookings@bloomshair.co.uk')
             return next();

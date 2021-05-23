@@ -9,19 +9,15 @@ import {
   createProductReview,
   topRatedProducts,
 } from '../controllers/productController.js';
-import { isAuthenticated } from "../auth/authenticated.js";
-import { isAuthorized } from "../auth/authorize.js";
+import { isAdmin, protect } from '../middleware/authMiddleware.js';
 
-router.route('/').get(getProducts).post(isAuthenticated,
-  isAuthorized({ hasRole: ['admin', 'manager'] }), createProduct);
+router.route('/').get(getProducts).post(protect, isAdmin, createProduct);
 router.get('/top', topRatedProducts);
 router
   .route('/:id')
   .get(getProductById)
-  .delete(isAuthenticated,
-    isAuthorized({ hasRole: ['admin', 'manager'] }), deleteProductById)
-  .put(isAuthenticated,
-    isAuthorized({ hasRole: ['admin', 'manager'] }), updateProduct);
-router.route('/:id/reviews').post(isAuthenticated, createProductReview);
+  .delete(protect, isAdmin, deleteProductById)
+  .put(protect, isAdmin, updateProduct);
+router.route('/:id/reviews').post(protect, createProductReview);
 
 export default router;
