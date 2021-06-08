@@ -1,9 +1,6 @@
-import path from 'path';
 import express from 'express';
-import admin from 'firebase-admin'
 import dotenv from 'dotenv';
 import morgan from 'morgan';
-import cors from 'cors';
 import { errorHandler, notFound } from './middleware/errorMiddleware.js';
 import connectDB from './config/db.js';
 
@@ -40,17 +37,17 @@ app.get('/api/config/paypal', (_, res) =>
 );
 
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '/frontend/build')));
+// if (process.env.NODE_ENV === 'production') {
+//   app.use(express.static(path.join(__dirname, '/frontend/build')));
 
-  app.get('*', (_, res) =>
-    res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
-  );
-} else {
-  app.get('/api', (_, res) => {
-    res.send('API is running....');
-  });
-}
+//   app.get('*', (_, res) =>
+//     res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
+//   );
+// } else {
+//   app.get('/api', (_, res) => {
+//     res.send('API is running....');
+//   });
+// }
 
 app.use(notFound);
 
