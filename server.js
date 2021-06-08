@@ -12,17 +12,10 @@ import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
-import serviceAccount  from './bloomshair-e4d4d-firebase-adminsdk-byumh-1eef9175ef.js';
 
 dotenv.config();
 
 connectDB();
-
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
-
 
 const app = express();
 
@@ -46,8 +39,6 @@ app.get('/api/config/paypal', (_, res) =>
   res.send(process.env.PAYPAL_CLIENT_ID)
 );
 
-const __dirname = path.resolve();
-app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '/frontend/build')));
