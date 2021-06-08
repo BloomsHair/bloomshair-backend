@@ -36,7 +36,7 @@ jobs:
           echo CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }} >> .env
           echo PORT=${{ secrets.PORT }} >> .env
           cat .env
-    - run: npm i
+    - run: yarn install
     - run: pm2 reload backendAPI
     env:
         CI: true
