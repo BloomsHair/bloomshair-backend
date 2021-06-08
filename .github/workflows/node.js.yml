@@ -31,10 +31,12 @@ jobs:
           echo MONGO_URI=${{ secrets.MONGO_URI }} >> .env
           echo NODE_ENV=${{ secrets.NODE_ENV }} >> .env
           echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
-          echo PAYPAL_CLIENT_ID=${{ secrets.PAYPAL_CLIENT_ID }} >> .env
           echo CLOUDINARY_NAME=${{ secrets.CLOUDINARY_NAME }} >> .env
           echo CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }} >> .env
           echo CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }} >> .env
           echo PORT=${{ secrets.PORT }} >> .env
           cat .env
     - run: npm i
+    - run: pm2 reload backendAPI
+    env:
+        CI: true
