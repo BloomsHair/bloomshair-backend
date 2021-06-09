@@ -1,6 +1,6 @@
-import * as admin from 'firebase-admin'
+const admin = require('firebase-admin')
 
-export async function getUid(req, res) {
+ async function getUid(req, res) {
     const { authorization } = req.headers
 
     if (!authorization)
@@ -24,4 +24,6 @@ export async function getUid(req, res) {
         console.error(`${err.code} -  ${err.message}`)
         return res.status(401).send({ message: 'Unauthorized' });
     }
-}
+ }
+
+module.exports = getUid;

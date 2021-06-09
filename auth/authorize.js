@@ -1,4 +1,4 @@
-export function isAuthorized({ hasRole, allowSameUser }) {
+ function isAuthorized({ hasRole, allowSameUser }) {
     return (req, res, next) => {
         const { role, email, uid } = res.locals
         const { id } = req.params
@@ -18,4 +18,6 @@ export function isAuthorized({ hasRole, allowSameUser }) {
 
         return res.status(403).send();
     }
-}
+ }
+
+module.exports = isAuthorized;

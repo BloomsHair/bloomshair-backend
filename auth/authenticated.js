@@ -1,8 +1,8 @@
-import asyncHandler from 'express-async-handler';
-import admin from 'firebase-admin';
-import User from '../models/userModel.js';
+const asyncHandler = require('express-async-handler');
+const admin = require('firebase-admin');
+const User = require('../models/userModel.js');
 
-export const isAuthenticated = asyncHandler(async (req, res, next) => {
+const isAuthenticated = asyncHandler(async (req, res, next) => {
   let token;
   if (
     req.headers.authorization &&
@@ -31,3 +31,5 @@ export const isAuthenticated = asyncHandler(async (req, res, next) => {
     }
   }
 });
+
+module.exports = isAuthenticated

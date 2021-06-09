@@ -1,6 +1,6 @@
-import asyncHandler from 'express-async-handler';
-import generateToken from '../utils/generateToken.js';
-import User from '../models/userModel.js';
+const asyncHandler = require('express-async-handler');
+const generateToken = require('../utils/generateToken.js');
+const User = require('../models/userModel.js');
 
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -148,32 +148,31 @@ const getUserById = asyncHandler(async (req, res) => {
 // @route PUT /api/users/:id
 // @access Private/Admin
 const updateUser = asyncHandler(async (req, res) => {
-
-    const { id } = req.params;
-  console.log(id)
+  const { id } = req.params;
+  console.log(id);
   const { displayName, email } = req.body;
-    const user = await User.findById(id);
+  const user = await User.findById(id);
 
-    if (user) {
-      user.name = displayName || user.name;
-      user.email = email || user.email;
-      user.isAdmin = req.body.isAdmin;
+  if (user) {
+    user.name = displayName || user.name;
+    user.email = email || user.email;
+    user.isAdmin = req.body.isAdmin;
 
-      const updatedUser = await user.save();
+    const updatedUser = await user.save();
 
-      return res.status(204).json({
-        _id: updatedUser._id,
-        name: updatedUser.name,
-        email: updatedUser.email,
-        isAdmin: updatedUser.isAdmin,
-      });
-    } else {
+    return res.status(204).json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+    });
+  } else {
     res.status(404);
     throw new Error('User not found');
   }
 });
 
-export {
+module.exports = {
   authUser,
   getUserProfile,
   registerUser,
