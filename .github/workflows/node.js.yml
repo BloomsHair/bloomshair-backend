@@ -27,15 +27,15 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Create .env file
       run: |
-          touch .env
-          echo NODE_ENV=${{ secrets.NODE_ENV }} >> .env
-          echo DB_URI=${{ secrets.DB_URI }} >> .env
-          echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
-          echo CLOUDINARY_NAME=${{ secrets.CLOUDINARY_NAME }} >> .env
-          echo CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }} >> .env
-          echo CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }} >> .env
-          echo PORT=${{ secrets.PORT }} >> .env
-          cat .env
+           touch .env
+           echo NODE_ENV=${{ secrets.NODE_ENV }} >> .env
+           echo DB_URI=${{ secrets.DB_URI }} >> .env
+           echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
+           echo CLOUDINARY_NAME=${{ secrets.CLOUDINARY_NAME }} >> .env
+           echo CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }} >> .env
+           echo CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }} >> .env
+           echo PORT=${{ secrets.PORT }} >> .env
+           cat .env
     - run: yarn install
     - run: pm2 reload backendAPI
     env:
