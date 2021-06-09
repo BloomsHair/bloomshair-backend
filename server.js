@@ -1,13 +1,13 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');;
-const { errorHandler, notFound } = require('./middleware/errorMiddleware.js');
-const connectDB = require('./config/db.js');
+const { errorHandler, notFound } = require('./middleware/errorMiddleware');
+const connectDB = require('./config/db');
 
-const productRoutes = require('./routes/productRoutes.js');
-const userRoutes = require( './routes/userRoutes.js');
-const orderRoutes = require( './routes/orderRoutes.js');
-const uploadRoutes = require('./routes/uploadRoutes.js');
+const productRoutes = require('./routes/productRoutes');
+const userRoutes = require( './routes/userRoutes');
+const orderRoutes = require( './routes/orderRoutes');
+const uploadRoutes = require('./routes/uploadRoutes');
 
 dotenv.config();
 

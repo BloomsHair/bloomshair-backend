@@ -7,9 +7,9 @@ const {
   getUserOrders,
   getOrders,
   updateOrderToDelivered,
-} = require('../controllers/orderController.js');
+} = require('../controllers/orderController');
 
-const { isAdmin, protect } = require('../middleware/authMiddleware.js');
+const { isAdmin, protect } = require('../middleware/authMiddleware');
 
 router
   .route('/')

@@ -1,6 +1,6 @@
 const express = require('express');
-const cloudinary = require('../utils/cloudinary.js');
-const { isAdmin, protect } =  require('../middleware/authMiddleware.js');
+const cloudinary = require('../utils/cloudinary');
+const { isAdmin, protect } =  require('../middleware/authMiddleware');
 
 const router = express.Router();
 

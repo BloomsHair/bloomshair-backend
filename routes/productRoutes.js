@@ -8,8 +8,8 @@ const {
   updateProduct,
   createProductReview,
   topRatedProducts,
-} = require( '../controllers/productController.js');
-const { isAdmin, protect } = require('../middleware/authMiddleware.js');
+} = require( '../controllers/productController');
+const { isAdmin, protect } = require('../middleware/authMiddleware');
 
 router.route('/').get(getProducts).post(protect, isAdmin, createProduct);
 router.get('/top', topRatedProducts);

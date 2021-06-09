@@ -1,6 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const admin = require('firebase-admin');
-const User = require('../models/userModel.js');
+const User = require('../models/userModel');
 
 const isAuthenticated = asyncHandler(async (req, res, next) => {
   let token;

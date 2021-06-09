@@ -9,8 +9,8 @@ const {
   deleteUser,
   getUserById,
   updateUser,
-} = require( '../controllers/userController.js');
-const { protect, isAdmin } = require('../middleware/authMiddleware.js');
+} = require( '../controllers/userController');
+const { protect, isAdmin } = require('../middleware/authMiddleware');
 
 router.post('/login', authUser);
 router
