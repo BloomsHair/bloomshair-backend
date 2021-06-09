@@ -4,8 +4,8 @@
   "main": "server",
   "type": "module",
   "scripts": {
-    "start": "node --experimental-json-modules server",
-    "dev": "nodemon --experimental-json-modules server",
+    "start": "node --experimental-modules server",
+    "dev": "nodemon --experimental-modules server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "A Oladipupo-Usoro",
