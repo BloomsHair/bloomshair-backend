@@ -7,7 +7,7 @@ const router = express.Router();
 const uploadImgCloudinary = async (req, res) => {
   try {
     const fileStr = req.body.data;
-    const uploadedResponse = await cloudinary.v2.uploader.upload(fileStr, {
+    const uploadedResponse = await cloudinary.uploader.upload(fileStr, {
       upload_preset: 'blooms_hair_products',
     });
     res.status(201).json(uploadedResponse);

@@ -61,14 +61,15 @@ const createProduct = asyncHandler(async (req, res) => {
     name: 'Sample Name',
     price: 0,
     user: req.user._id,
-    image: '/images/sample.jpg',
+    image:
+      'https://res.cloudinary.com/dtkjg8f0n/image/upload/v1625415632/blooms_hair_products/sample_wic9ml.jpg',
     brand: 'Sample brand',
     category: 'Sample Category',
     countInStock: 0,
     numReviews: 0,
     description: 'Sample description',
   });
-  console.log(product);
+
   const createdProduct = await product.save();
   res.status(201).json(createdProduct);
 });

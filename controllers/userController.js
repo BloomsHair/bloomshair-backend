@@ -4,12 +4,14 @@ const User = require('../models/userModel');
 
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
+
   try {
     const user = await User.findOne({ email });
 
     if (user && (await user.matchPassword(password))) {
       res.json({
         _id: user._id,
+        image: user.image,
         name: user.name,
         email: user.email,
         isAdmin: user.isAdmin,
@@ -26,7 +28,7 @@ const authUser = asyncHandler(async (req, res) => {
 });
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { displayName, password, email } = req.body;
+  const { displayName, password, email, isAdmin, image } = req.body;
 
   if (!displayName || !password || !email) {
     return res.status(400).send({ message: 'Missing fields' });
@@ -43,11 +45,14 @@ const registerUser = asyncHandler(async (req, res) => {
     name: displayName,
     email,
     password,
+    image: image ? image : "https://res.cloudinary.com/dtkjg8f0n/image/upload/v1625765848/blooms_hair_products/icons8-user-96_wyguya.png",
+    isAdmin,
   });
   if (user) {
     res.status(201).json({
       _id: user._id,
       name: user.name,
+      image: user.image,
       email: user.email,
       isAdmin: user.isAdmin,
       token: generateToken(user._id),
@@ -67,6 +72,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
   if (user) {
     res.json({
       _id: user._id,
+      image: user.image,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
@@ -84,7 +90,8 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user[0]._id);
 
   if (user) {
-    user.name = req.body.name || user.name;
+    user.name = req.body.displayName || user.name;
+    user.image = req.body.image || user.image;
     user.email = req.body.email || user.email;
     if (req.body.password) {
       user.password = req.body.password;
@@ -110,6 +117,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 // @access Private/admin
 const getUsers = asyncHandler(async (req, res) => {
   const users = await User.find({});
+
   res.json(users);
 });
 
@@ -149,18 +157,20 @@ const getUserById = asyncHandler(async (req, res) => {
 // @access Private/Admin
 const updateUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  console.log(id);
-  const { displayName, email } = req.body;
+
+  const { displayName, image, email, isAdmin } = req.body;
+
   const user = await User.findById(id);
 
   if (user) {
     user.name = displayName || user.name;
+    user.image = image || user.image;
     user.email = email || user.email;
-    user.isAdmin = req.body.isAdmin;
+    user.isAdmin = isAdmin || user.isAdmin;
 
     const updatedUser = await user.save();
 
-    return res.status(204).json({
+    res.status(204).json({
       _id: updatedUser._id,
       name: updatedUser.name,
       email: updatedUser.email,
