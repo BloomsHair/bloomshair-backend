@@ -8,6 +8,7 @@ const productRoutes = require('./routes/productRoutes');
 const userRoutes = require( './routes/userRoutes');
 const orderRoutes = require( './routes/orderRoutes');
 const uploadRoutes = require('./routes/upLoadRoutes');
+const galleryRoutes = require('./routes/galleryRoutes');
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.get('/api', (_, res) => {
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/gallery', galleryRoutes);
 app.use('/api/upload', uploadRoutes);
 
 app.get('/api/config/paypal', (_, res) =>
