@@ -6,6 +6,9 @@ const Order = require('../models/orderModel');
 // @access Private
 const addOrderItems = asyncHandler(async (req, res) => {
   const {
+   newOrder
+  } = req.body;
+  const {
     orderItems,
     shippingAddress,
     paymentMethod,
@@ -13,7 +16,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
     taxPrice,
     shippingPrice,
     totalPrice,
-  } = req.body;
+  } = newOrder;
 
   if (orderItems && orderItems.length === 0) {
     res.status(400);
@@ -21,7 +24,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
   } else {
     const order = new Order({
       orderItems,
-      user: req.user[0]._id,
+      user: req.user._id,
       shippingAddress,
       paymentMethod,
       itemsPrice,

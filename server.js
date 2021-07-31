@@ -1,12 +1,12 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const morgan = require('morgan');;
+const morgan = require('morgan');
 const { errorHandler, notFound } = require('./middleware/errorMiddleware');
 const connectDB = require('./config/db');
 
 const productRoutes = require('./routes/productRoutes');
-const userRoutes = require( './routes/userRoutes');
-const orderRoutes = require( './routes/orderRoutes');
+const userRoutes = require('./routes/userRoutes');
+const orderRoutes = require('./routes/orderRoutes');
 const uploadRoutes = require('./routes/upLoadRoutes');
 const galleryRoutes = require('./routes/galleryRoutes');
 
@@ -34,8 +34,9 @@ app.use('/api/gallery', galleryRoutes);
 app.use('/api/upload', uploadRoutes);
 
 app.get('/api/config/paypal', (_, res) =>
-  res.send(process.env.PAYPAL_CLIENT_ID)
+  res.json(process.env.PAYPAL_CLIENT_ID)
 );
+
 
 app.use(notFound);
 

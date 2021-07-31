@@ -45,7 +45,9 @@ const registerUser = asyncHandler(async (req, res) => {
     name: displayName,
     email,
     password,
-    image: image ? image : "https://res.cloudinary.com/dtkjg8f0n/image/upload/v1625765848/blooms_hair_products/icons8-user-96_wyguya.png",
+    image: image
+      ? image
+      : 'https://res.cloudinary.com/dtkjg8f0n/image/upload/e_sharpen:100,q_auto/v1621633003/sample.webp',
     isAdmin,
   });
   if (user) {
@@ -102,6 +104,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     res.json({
       _id: updatedUser._id,
       name: updatedUser.name,
+      image: updatedUser.image,
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
       token: generateToken(updatedUser._id),
